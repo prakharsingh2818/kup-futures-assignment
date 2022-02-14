@@ -3,10 +3,8 @@ package edu.knoldus
 import org.scalatest.flatspec.AnyFlatSpec
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
-import scala.util.{Failure, Success}
 
 
 class DirectoryListerTest extends AnyFlatSpec {
@@ -23,23 +21,8 @@ class DirectoryListerTest extends AnyFlatSpec {
   val resultThree: List[String] = List("src/test/scala", "src/test/scala/edu", "src/test/scala/edu/knoldus", "src/test/scala/edu/knoldus/DirectoryListerTest.scala")
 
   "listDirectories" should "list directories of src" in {
-    val futureResultOne = directoryLister.listDirectories(pathOne)
-    Thread.sleep(2000)
-   /* for {
-      actualResultOne <- futureResultOne
-    } yield {
-      assertResult(false)(true)
-      assertResult(resultOne)(actualResultOne)
-    }*/
-    futureResultOne.onComplete {
-      case Failure(exception) => ???
-      case Success(actualResultOne) => {
-        assertResult(resultOne)(actualResultOne)
-        assertResult(false)(true)
-      }
-    }
-    /*val actualResultOne: List[String] = Await.result(directoryLister.listDirectories(pathOne), 3 seconds)
-    assertResult(resultOne)(actualResultOne)*/
+    val actualResultOne: List[String] = Await.result(directoryLister.listDirectories(pathOne), 3 seconds)
+    assertResult(resultOne)(actualResultOne)
 
   }
   it should "list directories of src/main" in {
